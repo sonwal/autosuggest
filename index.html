@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>Auto Complete Demo</title>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript" src="jquery.autocomplete.min.js"></script>
+	<link rel="stylesheet" href="easy-autocomplete.min.css">
+	<style type="text/css">
+		.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+		.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+		.autocomplete-selected { background: #F0F0F0; }
+		.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+		.autocomplete-group { padding: 2px 5px; }
+		.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+	</style>
+</head>
+<body>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('[name=q]').autocomplete({
+			    lookup:function(query,done){
+			    	if(query.length>2){
+				    	$.getJSON("ajax.php",{q:query},function(data){
+				    		var newData = {suggestions:[]};
+				    		$.each(data.suggestions, function(id,name) {
+				                newData.suggestions.push({ value: name.name, data: name.id });
+				            })
+				    		done(newData);
+				    	});
+			    	}
+			    }/*,
+			    onSelect: function (suggestion) {
+			        alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+			    }*/
+			});
+		});
+	</script>
+<input type="text" name="q">
+</body>
+</html>
